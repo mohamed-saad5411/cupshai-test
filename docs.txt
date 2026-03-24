@@ -1,0 +1,60 @@
+CupShai API (Quick Reference)
+Base URL (local): `http://localhost:3000`
+Auth header (for protected routes):
+`Authorization: Bearer <supabase_access_token>`
+---------------------------------
+1-Auth
+### POST `/api/auth`
+**signup**
+```json
+{ "action": "signup", "email": "you@example.com", "password": "********", "fullName": "Mohamed" }
+login
+
+{ "action": "login", "email": "you@example.com", "password": "********" }
+refresh
+
+{ "action": "refresh", "refresh_token": "..." }
+---------------------------------
+2-Creators
+GET /api/creators?limit=20&offset=0
+Returns creators list + pagination.
+
+POST /api/creators
+Requires auth
+
+{ "displayName": "Mohamed", "bio": "Creator on CupShai", "avatarUrl": "https://..." }
+Transactions
+GET /api/transactions?creatorId=<uuid>&limit=20&offset=0
+POST /api/transactions
+Requires auth
+
+{
+  "creatorId": "<uuid>",
+  "amount": 9.99,
+  "currency": "USD",
+  "type": "support",
+  "metadata": { "note": "Thanks!" }
+}
+---------------------------------
+3-Payouts
+GET /api/payouts?creatorId=<uuid>&status=pending&limit=20&offset=0
+POST /api/payouts
+Requires auth
+
+{
+  "creatorId": "<uuid>",
+  "amount": 120.5,
+  "currency": "USD",
+  "destination": { "type": "bank_transfer", "value": "IBAN..." },
+  "notes": "Monthly payout"
+}
+PATCH /api/payouts
+Admin-only Header: x-internal-admin-token: <INTERNAL_ADMIN_TOKEN>
+
+{ "id": "<uuid>", "status": "approved", "adminNote": "Approved" }
+---------------------------------
+4-Admin
+GET /api/admin/users?page=1&perPage=50
+Admin-only Header: x-internal-admin-token: <INTERNAL_ADMIN_TOKEN> Returns Supabase auth users + user_metadata.role.
+
+If you want it even smaller (just endpoint list with no examples), tell me and I’ll shrink it.
