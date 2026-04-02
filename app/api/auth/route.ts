@@ -162,10 +162,10 @@ export async function POST(req: NextRequest) {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        phone: phone || undefined,
         options: {
           data: {
             ...(fullName ? { full_name: fullName } : {}),
-            ...(phone ? { phone } : {}),
             ...(username ? { username } : {}),
             role: "creator",
           },

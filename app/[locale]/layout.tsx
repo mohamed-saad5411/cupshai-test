@@ -6,6 +6,7 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
+import NavigationLoader from "@/components/shared/NavigationLoader";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const cairo = Cairo({ subsets: ["arabic"], variable: "--font-cairo" });
@@ -59,6 +60,7 @@ export default async function LocaleLayout({
         className={`antialiased ${isArabic ? "font-cairo" : "font-inter"} bg-cream text-dark`}
       >
         <NextIntlClientProvider messages={messages}>
+          <NavigationLoader />
           {children}
         </NextIntlClientProvider>
       </body>

@@ -110,8 +110,8 @@ export function EarlyAccessWizard({ locale }: { locale: string }) {
 
   if (isLoggedIn) {
     return (
-      <div id="early-access" className="lg:w-[50%] w-[90%] m-auto pb-16">
-        <h1 className="text-4xl sm:text-5xl md:text-[56px] font-semibold leading-[1.1] tracking-[-0.02em] text-[#2B2D42] mb-6">
+      <main id="early-access" className="overflow-hidden lg:w-[50%] w-[90%] m-auto pb-16">
+        <h1 className="text-4xl sm:text-5xl  md:text-[56px] font-semibold leading-[1.1] tracking-[-0.02em] w-full text-[#2B2D42] mb-6">
           {t("loggedInHeadline")}
         </h1>
         <p className="text-lg sm:text-xl text-[#BFC0C0] mb-10">{t("loggedInDesc")}</p>
@@ -121,77 +121,77 @@ export function EarlyAccessWizard({ locale }: { locale: string }) {
         >
           {t("goToDashboard")}
         </Link>
-      </div>
+      </main>
     );
   }
-
+  
   return (
     <>
       {/* w-full max-w-[480px] */}
       <div id="early-access" className="lg:w-[50%] w-[90%]  m-auto ">
-      <h1 className="text-4xl sm:text-5xl md:text-[56px] font-semibold leading-[1.1] tracking-[-0.02em] text-[#2B2D42] mb-6">
-        {t("step1Title")}
-      </h1>
-      <p className="text-lg sm:text-xl text-[#BFC0C0] mb-10">
-        {t("step1Desc")}
-      </p>
+        <h1 className="text-4xl sm:text-5xl md:text-[56px] font-semibold leading-[1.1] tracking-[-0.02em] text-[#2B2D42] mb-6">
+          {t("step1Title")}
+        </h1>
+        <p className="text-lg sm:text-xl text-[#BFC0C0] mb-10">
+          {t("step1Desc")}
+        </p>
 
-      {step === 1 && (
-        <RegisterStepOne
-          email={email}
-          password={password}
-          onChange={(field, value) => {
-            if (field === "email") setEmail(value);
-            if (field === "password") setPassword(value);
-          }}
-          onNext={async () => {
-            setError(null);
-            const ok = await checkEmail();
-            if (ok) setStep(2);
-          }}
-          loading={loading}
-          error={error}
-        />
-      )}
+        {step === 1 && (
+          <RegisterStepOne
+            email={email}
+            password={password}
+            onChange={(field, value) => {
+              if (field === "email") setEmail(value);
+              if (field === "password") setPassword(value);
+            }}
+            onNext={async () => {
+              setError(null);
+              const ok = await checkEmail();
+              if (ok) setStep(2);
+            }}
+            loading={loading}
+            error={error}
+          />
+        )}
 
-      {step === 2 && (
-        <RegisterStepTwo
-          fullName={fullName}
-          phone={phone}
-          onChange={(field, value) => {
-            if (field === "fullName") setFullName(value);
-            if (field === "phone") setPhone(value);
-          }}
-          onNext={() => {
-            setError(null);
-            setStep(3);
-          }}
-          onBack={() => setStep(1)}
-        />
-      )}
+        {step === 2 && (
+          <RegisterStepTwo
+            fullName={fullName}
+            phone={phone}
+            onChange={(field, value) => {
+              if (field === "fullName") setFullName(value);
+              if (field === "phone") setPhone(value);
+            }}
+            onNext={() => {
+              setError(null);
+              setStep(3);
+            }}
+            onBack={() => setStep(1)}
+          />
+        )}
 
-      {step === 3 && (
-        <RegisterStepThree
-          username={username}
-          onChange={(v) => {
-            setUsername(v);
-            setError(null);
-            void checkUsername(v);
-          }}
-          onBack={() => setStep(2)}
-          onSubmit={handleRegister}
-          loading={loading}
-          error={
-            error ??
-            (usernameAvailable === false
-              ? "Username already used"
-              : checkingUsername
-                ? "Checking username…"
-                : null)
-          }
-        />
-      )}
-    </div>
+        {step === 3 && (
+          <RegisterStepThree
+            username={username}
+            onChange={(v) => {
+              setUsername(v);
+              setError(null);
+              void checkUsername(v);
+            }}
+            onBack={() => setStep(2)}
+            onSubmit={handleRegister}
+            loading={loading}
+            error={
+              error ??
+              (usernameAvailable === false
+                ? "Username already used"
+                : checkingUsername
+                  ? "Checking username…"
+                  : null)
+            }
+          />
+        )}
+      </div>
     </>
   );
 }

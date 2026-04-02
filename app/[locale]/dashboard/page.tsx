@@ -16,7 +16,7 @@ export default async function DashboardPage({
       dir={isAr ? "rtl" : "ltr"}
     >
       <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <DashboardTopBar locale={locale} />
+        {/* <DashboardTopBar locale={locale} /> */}
         <main className="rounded-2xl bg-white p-5 sm:p-7 md:p-8 shadow-sm border border-slate-200">
           <h1 className="text-2xl md:text-3xl font-semibold text-[#2B2D42] mb-2">
             {t("dashboard")}

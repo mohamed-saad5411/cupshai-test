@@ -31,12 +31,12 @@ export function AuthNavActions({ locale, variant = "default" }: Props) {
   if (isLoggedIn) {
     return (
       <div className="flex items-center gap-2 shrink-0">
-        <Link
+        {/* <Link
           href={`/${locale}/dashboard`}
           className={`${baseBtn} bg-[#2B2D42] text-white hover:bg-[#1f2133] flex items-center`}
         >
           {t("dashboard")}
-        </Link>
+        </Link> */}
         <button
           type="button"
           onClick={handleLogout}

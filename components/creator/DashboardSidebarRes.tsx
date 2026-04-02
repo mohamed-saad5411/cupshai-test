@@ -1,9 +1,11 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import Logo from "@/components/shared/Logo";
 import { useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import NavLink from "../shared/NavLink";
 
 const navItems = [
   {
@@ -116,6 +118,9 @@ const settingsItems = [
 export default function DashboardSidebarRes() {
   const locale = useLocale();
   const pathname = usePathname();
+  const router = useRouter();
+  const supabase = createClient();
+
   const isAr = locale === "ar";
 
   function isActive(href: string) {
@@ -132,10 +137,11 @@ export default function DashboardSidebarRes() {
     const href = item.external ? `/${locale}/${item.href}` : `/${locale}${item.href}`;
     // setMobileOpen(mobileOpen)
     return (
-      <Link
+      <NavLink
         key={item.key}
         href={href}
         // target={item.external ? "" : undefined}
+        onClick={() => setMobileOpen(false)}
         className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${active
           ? "bg-orange/10 text-orange"
           : "text-dark/60 hover:bg-dark/5 hover:text-dark"
@@ -150,9 +156,15 @@ export default function DashboardSidebarRes() {
             <line x1="10" y1="14" x2="21" y2="3" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         )}
-      </Link>
+      </NavLink>
     );
   }
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    router.push(`/${locale}/login`);
+  }
+
 
   const t = useTranslations("nav");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -167,22 +179,6 @@ export default function DashboardSidebarRes() {
       <div className="max-w-[1040px] mx-auto px-5 sm:px-6 h-16 flex items-center justify-between">
         <Logo locale={locale} />
 
-        {/* Desktop nav */}
-        {/* <div className="hidden md:flex items-center gap-1">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`text-sm font-medium px-3.5 py-2 rounded-full transition-all duration-200 ${pathname === link.href
-                  ? "text-dark bg-silver-light/50"
-                  : "text-dark/55 hover:text-dark hover:bg-silver-light/30"
-                }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div> */}
-
         <div className="flex items-center gap-2.5">
           <Link
             href={newPath}
@@ -190,12 +186,15 @@ export default function DashboardSidebarRes() {
           >
             {locale === "en" ? "العربية" : "EN"}
           </Link>
-          <Link
-            href={`/${locale}`}
+          <button
             className="text-sm font-semibold px-5 py-2 bg-dark text-white rounded-full hover:bg-dark-soft transition-colors duration-150"
+            onClick={() => {
+              // Handle logout logic here
+              handleLogout()
+            }}
           >
-            {t("joinWaitlist")}
-          </Link>
+            {t("logOut")}
+          </button>
 
           {/* Mobile hamburger */}
           <button
@@ -212,7 +211,8 @@ export default function DashboardSidebarRes() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden glass border-t border-silver-light/60 animate-fade-in">
+        <div className={`md:hidden glass border-t border-silver-light/60 overflow-hidden transition-all duration-700 ease-in-out
+  ${mobileOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"}`}>
           <div className="px-5 py-4 space-y-1">
             {/* Navigation */}
             <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
