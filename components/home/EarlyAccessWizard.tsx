@@ -9,6 +9,7 @@ import { RegisterStepThree } from "@/components/auth/RegisterStepThree";
 import { useTranslations } from "next-intl";
 import { useAuthSession } from "@/hooks/useAuthSession";
 import { persistSession } from "@/lib/auth-storage";
+import Navbar from "../shared/Navbar";
 
 type Step = 1 | 2 | 3;
 
@@ -109,7 +110,7 @@ export function EarlyAccessWizard({ locale }: { locale: string }) {
   };
 
   if (isLoggedIn) {
-    return (
+    return <>
       <main id="early-access" className="overflow-hidden lg:w-[50%] w-[90%] m-auto pb-16">
         <h1 className="text-4xl sm:text-5xl  md:text-[56px] font-semibold leading-[1.1] tracking-[-0.02em] w-full text-[#2B2D42] mb-6">
           {t("loggedInHeadline")}
@@ -122,9 +123,10 @@ export function EarlyAccessWizard({ locale }: { locale: string }) {
           {t("goToDashboard")}
         </Link>
       </main>
-    );
+
+    </>
   }
-  
+
   return (
     <>
       {/* w-full max-w-[480px] */}

@@ -1,6 +1,7 @@
 import { EarlyAccessWizard } from "@/components/home/EarlyAccessWizard";
 import SocialFooter from "@/components/home/SocialFooter";
 import TopBar from "@/components/home/TopBar";
+import Navbar from "@/components/shared/Navbar";
 import { getLocale } from "next-intl/server";
 
 export default async function Home() {
@@ -12,7 +13,9 @@ export default async function Home() {
       className="min-h-screen bg-[#FAFAF8] text-[#2B2D42] flex flex-col font-[family-name:var(--font-manrope)]"
       dir={isAr ? "rtl" : "ltr"}
     >
-      <TopBar locale={locale} />
+      {/* <TopBar locale={locale} /> */}
+            <Navbar locale={locale} />
+      
       <EarlyAccessWizard locale={locale} />
       <SocialFooter />
     </main>
