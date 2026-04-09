@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import { Inter, Cairo, Manrope } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
