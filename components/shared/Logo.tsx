@@ -1,3 +1,4 @@
+import { useAuthSession } from "@/hooks/useAuthSession";
 import Link from "next/link";
 
 interface LogoProps {
@@ -13,8 +14,12 @@ export default function Logo({ locale, size = "md", white = false }: LogoProps) 
     lg: "text-4xl",
   };
 
+  const { isLoggedIn } = useAuthSession();
+
   return (
-    <Link href={`/${locale}`} className="inline-flex items-center gap-1.5 group">
+    // <Link href={`/${locale}`} className={isLoggedIn ? "md:hidden inline-flex items-center gap-1.5 group" : (!isLoggedIn)? "inline-flex items-center gap-1.5 group" :''}>
+    <Link href={`/${locale}`} className={`inline-flex items-center gap-1.5 group ${isLoggedIn ? "md:hidden" : "block"} `}>
+
       <svg
         width={size === "lg" ? 40 : size === "md" ? 28 : 22}
         height={size === "lg" ? 40 : size === "md" ? 28 : 22}

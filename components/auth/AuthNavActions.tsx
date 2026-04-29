@@ -1,21 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { usePathname, useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { clearStoredSession } from "@/lib/auth-storage";
 import { useAuthSession } from "@/hooks/useAuthSession";
 
+
 type Props = {
-  locale: string;
   /** Compact layout for tight headers */
   variant?: "default" | "compact";
 };
 
-export function AuthNavActions({ locale, variant = "default" }: Props) {
+export function AuthNavActions({ variant = "default" }: Props) {
   const { isLoggedIn } = useAuthSession();
   const router = useRouter();
   const t = useTranslations("auth");
+  const pathname = usePathname();
+  const locale = useLocale();
+  const isAr = locale === "ar";
+
 
   const baseBtn =
     variant === "compact"
@@ -48,20 +52,41 @@ export function AuthNavActions({ locale, variant = "default" }: Props) {
     );
   }
 
-  return (
-    <div className="flex items-center gap-2 shrink-0">
-      <Link
-        href={`/${locale}/login`}
-        className={`${baseBtn} flex items-center border border-[#2B2D42]/20 text-[#2B2D42] hover:bg-[#EDEDE9]/80`}
-      >
-        {t("login")}
-      </Link>
-      <Link
-        href={`/${locale}#early-access`}
-        className={`${baseBtn} bg-[#F4A259] flex items-center text-[#2B2D42] hover:bg-[#e8954a]`}
-      >
-        {t("signUp")}
-      </Link>
+  return <>
+    <div className="flex  items-center gap-3">
+      {pathname === `/${locale}/signup` ?
+        <Link
+          href={`/${locale}/login`}
+          className=" font-semibold hidden sm:block text-gray-700 hover:text-gray-900 transition-colors " >
+          {t("login")}
+        </Link>
+
+        : pathname === `/${locale}/login` ?
+          <Link
+            href={`/${locale}/signup`}
+            className=" bg-yellow-400 hidden sm:block hover:bg-yellow-300 text-gray-900 font-bold text-sm px-5 py-2.5 rounded-full transition-all duration-200 hover:scale-105 hover:shadow-lg shadow-yellow-200 "
+          >
+            {/* Start my page */}
+            {t("Start my page")}
+          </Link>
+          :
+          <>
+            <Link
+              href="/login"
+              className=" hidden sm:block text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors "      >
+              {t("login")}
+            </Link>
+            <Link
+              href="/signup"
+              className=" bg-yellow-400 hidden sm:block h-11 text-center hover:bg-yellow-300 text-gray-900 font-bold px-5 py-2.5 rounded-full transition-all duration-200 hover:scale-105 hover:shadow-lg shadow-yellow-200"
+            >
+              {/* Start my page */}
+              {t("Start my page")}
+            </Link>
+          </>
+      }
+
+
     </div>
-  );
+  </>;
 }

@@ -2,6 +2,8 @@ import { useTranslations, useLocale } from "next-intl";
 import Link from "next/link";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+import HomeNavBar from "@/components/home/HomeNavBar";
+
 
 export default function ComparePage() {
   const t = useTranslations("compare");
@@ -20,11 +22,12 @@ export default function ComparePage() {
   return (
     <>
       <Navbar />
+      {/* <HomeNavBar /> */}
       <main className="pt-16 min-h-screen bg-cream">
         {/* Hero */}
-        <section className="py-20 px-4 text-center bg-dark text-cream">
+        <section className="py-20 px-4 text-center bg-white">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">{t("title")}</h1>
-          <p className="text-cream/60 text-lg max-w-xl mx-auto">{t("subtitle")}</p>
+          <p className="text-[#1E1E1E]/60 mb-8 text-lg max-w-xl mx-auto">{t("subtitle")}</p>
         </section>
 
         {/* Table */}

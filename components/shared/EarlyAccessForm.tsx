@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NICHES = [
@@ -16,6 +17,7 @@ const NICHES = [
 export default function EarlyAccessForm({ locale }: { locale: string }) {
   const t = useTranslations("earlyAccess");
   const isAr = locale === "ar";
+  const router = useRouter();
 
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
@@ -28,9 +30,6 @@ export default function EarlyAccessForm({ locale }: { locale: string }) {
   const [checkingUsername, setCheckingUsername] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
-  const [completed, setCompleted] = useState(false);
-  const [claimedUrl, setClaimedUrl] = useState("");
-  const [founderNumber, setFounderNumber] = useState<number | null>(null);
 
   useEffect(() => {
     if (!username || username.length < 3) { setUsernameAvailable(null); return; }
@@ -86,11 +85,23 @@ export default function EarlyAccessForm({ locale }: { locale: string }) {
     try {
       const res = await fetch("/api/early-access", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ step: "claim-username", email, username }),
+        body: JSON.stringify({ step: "claim-username", email, username, locale }),
       });
       const data = await res.json();
-      if (res.ok) { setClaimedUrl(data.profile.url); setFounderNumber(data.profile.founderNumber); setCompleted(true); setStatus("idle"); }
-      else { setErrorMsg(data.error || t("errorGeneric")); setStatus("error"); }
+      if (res.ok) {
+        // Set session in browser — no reload, no token in URL
+        const { createClient } = await import("@/lib/supabase/client");
+        const supabase = createClient();
+        await supabase.auth.setSession({
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token,
+        });
+        // Clean redirect — no hash, no reload
+        router.push(`/${locale}/dashboard`);
+      } else {
+        setErrorMsg(data.error || t("errorGeneric"));
+        setStatus("error");
+      }
     } catch { setErrorMsg(t("errorGeneric")); setStatus("error"); }
   }
 
@@ -112,71 +123,38 @@ export default function EarlyAccessForm({ locale }: { locale: string }) {
       </motion.div>
 
       {/* Progress bars */}
-      {!completed && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.1 }}
-          className="flex items-center justify-center gap-3 mb-5 w-full max-w-[200px]"
-        >
-          {[1, 2, 3].map((s) => (
-            <div
-              key={s}
-              className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${step >= s ? "bg-[#F4A259]" : "bg-[#EDEDE9]"
-                }`}
-            />
-          ))}
-        </motion.div>
-      )}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.1 }}
+        className="flex items-center justify-center gap-3 mb-5 w-full max-w-[200px]"
+      >
+        {[1, 2, 3].map((s) => (
+          <div
+            key={s}
+            className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${step >= s ? "bg-[#F4A259]" : "bg-[#EDEDE9]"}`}
+          />
+        ))}
+      </motion.div>
 
       {/* Step label */}
-      {!completed && (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-sm font-medium text-[#BFC0C0] mb-6 w-full max-w-[480px]"
-          style={{ textAlign: isAr ? "right" : "left" }}
-        >
-          {isAr ? `${step} / 3 خطوة` : `Step ${step} / 3`}
-        </motion.p>
-      )}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="text-sm font-medium text-[#BFC0C0] mb-6 w-full max-w-[480px]"
+        style={{ textAlign: isAr ? "right" : "left" }}
+      >
+        {isAr ? `${step} / 3 خطوة` : `Step ${step} / 3`}
+      </motion.p>
 
       {/* Step content */}
       <AnimatePresence mode="wait">
-        {completed ? (
-          <motion.div
-            key="success"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white border border-[#BFC0C0]/20 rounded-2xl px-8 py-10 text-center max-w-md w-full shadow-lg"
-          >
-            <div className="text-5xl mb-4">🎉</div>
-            <h2 className="text-2xl font-bold text-[#F4A259] mb-2">{t("successTitle")}</h2>
-            {founderNumber && (
-              <p className="text-[#BFC0C0] text-sm mb-1">
-                {t("founderNumber")} <span className="text-[#F4A259] font-bold text-lg">#{founderNumber}</span>
-              </p>
-            )}
-            <p className="text-[#BFC0C0] mb-6 text-sm">{t("successMessage")}</p>
-            <div className="bg-[#FAFAF8] rounded-xl px-4 py-3 border border-[#EDEDE9] mb-6">
-              <p className="text-[#BFC0C0] text-xs mb-1">{t("yourLink")}</p>
-              <p className="text-[#F4A259] font-bold text-lg">{claimedUrl}</p>
-            </div>
-            <button
-              onClick={() => { setCompleted(false); setStep(1); setEmail(""); setUsername(""); }}
-              className="h-12 rounded-full bg-[#F4A259] text-white text-base font-bold hover:bg-[#F4A259]/90 transition-all px-8"
-            >
-              {isAr ? "تم" : "Done"}
-            </button>
-          </motion.div>
-        ) : step === 1 ? (
+        {step === 1 ? (
           <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="w-full max-w-[480px]">
             <h1 className="text-4xl sm:text-5xl md:text-[68px] font-semibold leading-[1.1] tracking-[-0.02em] text-[#2B2D42] mb-6">
               {t("step1Title")}
             </h1>
-            <p className="text-lg sm:text-xl text-[#BFC0C0] mb-10">
-              {t("step1Desc")}
-            </p>
+            <p className="text-lg sm:text-xl text-[#BFC0C0] mb-10">{t("step1Desc")}</p>
             <form onSubmit={handleStep1} className="flex flex-col gap-4 mb-4">
               <div className="relative flex items-center">
                 <div className="absolute left-4 text-[#BFC0C0]">
@@ -223,7 +201,6 @@ export default function EarlyAccessForm({ locale }: { locale: string }) {
             {status === "error" && <p className="text-red-500 text-sm text-center">{errorMsg}</p>}
           </motion.form>
         ) : (
-          // Step 3 - Claim username
           <motion.form key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} onSubmit={handleStep3} className="w-full max-w-[480px] space-y-5">
             <div className="text-center mb-4">
               <h2 className="text-2xl sm:text-3xl font-bold text-[#2B2D42] mb-3">{t("step3Title")}</h2>

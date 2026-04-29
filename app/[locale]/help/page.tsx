@@ -3,6 +3,8 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import FAQSection from "@/components/landing/FAQSection";
 import Link from "next/link";
+import HomeNavBar from "@/components/home/HomeNavBar";
+
 
 const topics = [
   { icon: "🚀", en: { title: "Getting Started", desc: "How to create your page and set up your profile." }, ar: { title: "البداية", desc: "ازاي تعمل صفحتك وتضبط بروفايلك." } },
@@ -18,16 +20,17 @@ export default function HelpPage() {
   return (
     <>
       <Navbar />
+      {/* <HomeNavBar /> */}
       <main className="pt-16" dir={isAr ? "rtl" : "ltr"}>
         {/* Header */}
-        <section className="bg-[#1E1E1E] py-20 px-4 text-center text-[#F8F5EE]">
-          <span className="text-xs font-bold text-teal tracking-widest uppercase">
+        <section className="bg-white py-20 px-4 text-center ">
+          <span className="text-xs font-bold tracking-widest uppercase">
             {isAr ? "مركز المساعدة" : "Help Center"}
           </span>
           <h1 className="text-4xl sm:text-5xl font-extrabold mt-3 mb-4 leading-tight tracking-tight">
             {isAr ? "كيف نقدر نساعدك؟" : "How can we help you?"}
           </h1>
-          <p className="text-[#F8F5EE]/55 text-lg max-w-md mx-auto">
+          <p className="text-[#1E1E1E]/60 mb-8 text-lg max-w-md mx-auto">
             {isAr
               ? "ابحث في الأسئلة الشائعة أو تواصل معنا مباشرة."
               : "Browse the FAQs below or reach out to us directly."

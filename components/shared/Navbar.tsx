@@ -5,10 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 import { AuthNavActions } from "../auth/AuthNavActions";
+import { useAuthSession } from "@/hooks/useAuthSession";
+
 
 export default function Navbar() {
   const t = useTranslations("nav");
   const locale = useLocale();
+  const { isLoggedIn } = useAuthSession();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -16,14 +19,16 @@ export default function Navbar() {
   const newPath = pathname.replace(`/${locale}`, `/${otherLocale}`);
 
   const links = [
-    { href: `/${locale}/home`, label: t("home") },
+    { href: `/${locale}/`, label: t("home") },
     { href: `/${locale}/compare`, label: t("compare") },
     { href: `/${locale}/about`, label: locale === "ar" ? "من نحن" : "About" },
-    { href: `/${locale}/help`, label: locale === "ar" ? "مساعدة" : "Help" },
+    { href: `/${locale}/blog`, label: locale === "ar" ? "مدونة" : "Blog" },
+    { href: `/${locale}/help`, label: locale === "ar" ? "مساعدة" : "Help" }
   ];
 
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-silver-light/60">
+    <nav className={isLoggedIn ? 'hidden' : `fixed top-0 left-0 right-0 z-50 glass border-b border-silver-light/60`}>
       <div className="max-w-[1040px] mx-auto px-5 sm:px-6 h-16 flex items-center justify-between">
         <Logo locale={locale} />
 
@@ -43,13 +48,15 @@ export default function Navbar() {
           ))}
         </div>
 
+
+
         <div className="flex items-center gap-2.5">
           <AuthNavActions locale={locale} />
           <Link
             href={newPath}
             className="text-sm font-medium px-3.5 py-1.5 rounded-full text-dark/50 hover:text-dark hover:bg-silver-light/40 transition-all duration-200"
           >
-            {locale === "en" ? "العربية" : "EN"}
+            {locale === "en" ? "AR" : "EN"}
           </Link>
 
 
@@ -67,6 +74,8 @@ export default function Navbar() {
       </div>
 
       {/* Mobile menu */}
+
+
       {mobileOpen && (
         <div className="md:hidden glass border-t border-silver-light/60 animate-fade-in">
           <div className="px-5 py-4 space-y-1">
@@ -84,6 +93,21 @@ export default function Navbar() {
               </Link>
             ))}
           </div>
+          <div className="px-5 py-4 my-6 flex space-y-1">
+            <Link
+              href={`/${locale}/signup`}
+              className=" bg-yellow-400 mx-2 h-11 sm:hidden w-full mt-8 text-center hover:bg-yellow-300 text-gray-900 font-bold px-5 py-2.5 rounded-full transition-all duration-200 hover:scale-105 hover:shadow-lg shadow-yellow-200"
+            >
+              {/* Start my page */}
+              {t("Start my page")}
+            </Link>
+            <Link
+              href={`/${locale}/login`}
+              className="  bg-yellow-400  mx-2 h-11  sm:hidden w-full mt-8 text-center hover:bg-yellow-300 text-gray-900 font-bold px-5 py-2.5 rounded-full transition-all duration-200 hover:scale-105 hover:shadow-lg shadow-yellow-200"      >
+              {t("login")}
+            </Link>
+          </div>
+
         </div>
       )}
     </nav>

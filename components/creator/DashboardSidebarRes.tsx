@@ -6,6 +6,7 @@ import Logo from "@/components/shared/Logo";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import NavLink from "../shared/NavLink";
+import { useAuthSession } from "@/hooks/useAuthSession";
 
 const navItems = [
   {
@@ -171,12 +172,13 @@ export default function DashboardSidebarRes() {
 
   const otherLocale = locale === "en" ? "ar" : "en";
   const newPath = pathname.replace(`/${locale}`, `/${otherLocale}`);
+  const { isLoggedIn } = useAuthSession();
 
 
 
   return <>
     <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-silver-light/60">
-      <div className="max-w-[1040px] mx-auto px-5 sm:px-6 h-16 flex items-center justify-between">
+      <div className={`max-w-[1040px] mx-auto px-5 sm:px-6 h-16 flex items-center justify-between ${isLoggedIn ? "md:justify-end" : "hidden"} `}>
         <Logo locale={locale} />
 
         <div className="flex items-center gap-2.5">
@@ -184,7 +186,7 @@ export default function DashboardSidebarRes() {
             href={newPath}
             className="text-sm font-medium px-3.5 py-1.5 rounded-full text-dark/50 hover:text-dark hover:bg-silver-light/40 transition-all duration-200"
           >
-            {locale === "en" ? "العربية" : "EN"}
+            {locale === "en" ? "Ar" : "EN"}
           </Link>
           <button
             className="text-sm font-semibold px-5 py-2 bg-dark text-white rounded-full hover:bg-dark-soft transition-colors duration-150"
@@ -196,7 +198,7 @@ export default function DashboardSidebarRes() {
             {t("logOut")}
           </button>
 
-          {/* Mobile hamburger */}
+          {/* Mobile hamburger  */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden w-9 h-9 flex items-center justify-center rounded-full hover:bg-silver-light/40 transition-colors"
@@ -239,45 +241,4 @@ export default function DashboardSidebarRes() {
       )}
     </nav>
   </>
-  // <nav className="w-full bg-white top-0 flex">
-  //   {/* Logo */}
-  //   <div className="px-5 py-5 border-b border-gray-light">
-  //     <Logo locale={locale} />
-  //   </div>
-
-  //   {/* Navigation */}
-  //   <nav className=" overflow-y-auto px-3 py-4 space-y-1">
-  //     {navItems.map(renderItem)}
-
-  //     {/* Monetize section */}
-  //     <div className="pt-4 pb-1">
-  //       <p className="px-3 text-xs font-semibold text-dark/30 uppercase tracking-wider">
-  //         {isAr ? "تحقيق الدخل" : "Monetize"}
-  //       </p>
-  //     </div>
-  //     {monetizeItems.map(renderItem)}
-
-  //     {/* Settings section */}
-  //     <div className="pt-4 pb-1">
-  //       <p className="px-3 text-xs font-semibold text-dark/30 uppercase tracking-wider">
-  //         {isAr ? "الإعدادات" : "Settings"}
-  //       </p>
-  //     </div>
-  //     {settingsItems.map(renderItem)}
-  //   </nav>
-
-  //   {/* Bottom user area */}
-  //   <div className="px-4 py-4 border-t border-gray-light">
-  //     <div className="flex items-center gap-3">
-  //       <div className="w-9 h-9 rounded-full bg-orange/20 flex items-center justify-center text-lg">
-  //         ☕
-  //       </div>
-  //       <div className="min-w-0 flex-1">
-  //         <p className="text-sm font-semibold text-dark truncate">Creator</p>
-  //         <p className="text-xs text-dark/40 truncate">cupshai.com/username</p>
-  //       </div>
-  //     </div>
-  //   </div>
-  // </nav>
-
 }

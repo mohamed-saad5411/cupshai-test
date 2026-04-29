@@ -1,4 +1,5 @@
 "use client";
+import { useLocale } from "next-intl";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import Navbar from "@/components/shared/Navbar";
@@ -7,15 +8,17 @@ import SupporterHeader from "@/components/supporter/SupporterHeader";
 import OverviewTab from "@/components/supporter/OverviewTab";
 import BadgesTab from "@/components/supporter/BadgesTab";
 import ActivityTab from "@/components/supporter/ActivityTab";
+import DashboardTopBar from "@/components/creator/DashboardTopBar";
 
 export default function SupporterPage() {
   const t = useTranslations("supporter");
   const [activeTab, setActiveTab] = useState<"overview" | "badges" | "activity">("overview");
+  const locale = useLocale();
 
   return (
     <>
       {/* <Navbar /> */}
-      <main className="pt-16 min-h-screen bg-cream">
+      <main className=" min-h-screen bg-cream">
         <SupporterHeader />
 
         {/* Tabs */}
@@ -25,11 +28,10 @@ export default function SupporterPage() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${
-                  activeTab === tab
-                    ? "bg-orange text-white"
-                    : "text-dark/50 hover:text-dark"
-                }`}
+                className={`flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all ${activeTab === tab
+                  ? "bg-orange text-white"
+                  : "text-dark/50 hover:text-dark"
+                  }`}
               >
                 {t(`tab_${tab}`)}
               </button>

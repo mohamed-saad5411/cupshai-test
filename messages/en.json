@@ -5,11 +5,30 @@
     "forCreators": "For Creators",
     "signIn": "Sign In",
     "logOut": "Log out",
+    "about": "About",
+    "help": "Help",
+    "Start my page": "Start my page",
+    "login": "Log in",
     "joinWaitlist": "Sign Up"
+  },
+  "login": {
+    "badge":      "Welcome back",
+    "loading":      "loading ...",
+    "title":      "Sign in to your account",
+    "desc":       "Continue with your Google account to access your page.",
+    "googleBtn":  "Continue with Google",
+    "smallText":  "We'll never post anything without your permission.",
+    "noAccount":  "Don't have an account?",
+    "signupLink": "Sign up",
+    "emailPlaceholder": "Example@gmail.com",
+    "orWith": "or With",
+    "continueEmail": "Continue with email"
+
   },
   "auth": {
     "login": "Log in",
     "signUp": "Sign up",
+    "Start my page": "Start my page",
     "logOut": "Log out",
     "dashboard": "Dashboard",
     "loggedInHeadline": "Welcome back!",

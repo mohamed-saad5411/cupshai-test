@@ -3,6 +3,8 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import OurStorySection from "@/components/landing/OurStorySection";
 import Link from "next/link";
+import HomeNavBar from "@/components/home/HomeNavBar";
+
 
 export default function AboutPage() {
   const locale = useLocale();

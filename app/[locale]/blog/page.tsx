@@ -3,6 +3,7 @@ import { useLocale } from "next-intl";
 import Link from "next/link";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+import HomeNavBar from "@/components/home/HomeNavBar";
 
 const POSTS = [
   {
@@ -107,14 +108,15 @@ export default function BlogPage() {
   return (
     <>
       <Navbar />
+      {/* <HomeNavBar /> */}
       <main className="pt-16 min-h-screen bg-cream">
         {/* Header */}
-        <div className="bg-dark text-cream py-16">
+        <div className="bg-white py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
             <h1 className="text-4xl sm:text-5xl font-bold">
               {isAr ? "مدونة كبشاي" : "Cupshai Blog"}
             </h1>
-            <p className="text-cream/60 mt-3 max-w-lg mx-auto">
+            <p className="text-[#1E1E1E]/60 mb-8 mt-6 max-w-lg mx-auto">
               {isAr
                 ? "نصائح للمبدعين، قصص ملهمة، وتحديثات المنصة."
                 : "Creator tips, inspiring stories, and platform updates."}

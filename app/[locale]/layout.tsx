@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 import NavigationLoader from "@/components/shared/NavigationLoader";
+import Navbar from "@/components/shared/Navbar";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const cairo = Cairo({ subsets: ["arabic"], variable: "--font-cairo" });
@@ -60,7 +61,7 @@ export default async function LocaleLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <NavigationLoader />
-          
+          <Navbar />
           {children}
         </NextIntlClientProvider>
       </body>

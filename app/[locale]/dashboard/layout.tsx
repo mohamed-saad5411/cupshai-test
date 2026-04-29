@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import { Inter, Cairo, Manrope } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
@@ -7,6 +6,10 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import DashboardSidebar from "@/components/creator/DashboardSidebar";
 import DashboardSidebarRes from "@/components/creator/DashboardSidebarRes";
+import DashboardTopBar from "@/components/creator/DashboardTopBar"
+import DashboardShell from "./DashboardShell";
+
+
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const cairo = Cairo({ subsets: ["arabic"], variable: "--font-cairo" });
@@ -50,27 +53,20 @@ export default async function LocaleLayout({
   const messages = await getMessages();
   const isArabic = locale === "ar";
 
+
   return (
     <html
+
       lang={locale}
       dir={isArabic ? "rtl" : "ltr"}
       className={`${inter.variable} ${cairo.variable} ${manrope.variable}`}
     >
       <body
+
         className={`antialiased ${isArabic ? "font-cairo" : "font-inter"} bg-cream text-dark`}
       >
         <NextIntlClientProvider messages={messages}>
-          <div className="min-h-screen flex flex-col lg:grid lg:grid-cols-5">
-            <aside className="md:col-span-1 hidden md:block w-full border-b lg:border-b-0 lg:border-r border-slate-200 bg-white">
-              <DashboardSidebar />
-            </aside>
-            <nav className="lg:col-span-1 md:hidden w-full border-b lg:border-b-0 lg:border-r border-slate-200 bg-white">
-              <DashboardSidebarRes />
-            </nav>
-            <main className="lg:col-span-4 mt-12 w-full bg-[#FAFAF8]">
-              {children}
-            </main>
-          </div>
+          <DashboardShell>{children}</DashboardShell>
         </NextIntlClientProvider>
       </body>
     </html>

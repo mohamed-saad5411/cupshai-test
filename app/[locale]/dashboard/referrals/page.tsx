@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useLocale } from "next-intl";
+import DashboardTopBar from "@/components/creator/DashboardTopBar";
 
 const MOCK_CODE = "a1b2c3d4";
 
@@ -51,7 +52,7 @@ export default function ReferralsPage() {
     setTimeout(() => setCopied(false), 2000);
   }
 
-  return (
+  return <>
     <div className="p-6 sm:p-8 max-w-4xl">
       <h1 className="text-2xl font-bold text-dark mb-2">
         {isAr ? "برنامج الإحالة" : "Referral Program"}
@@ -105,11 +106,10 @@ export default function ReferralsPage() {
           </div>
           <button
             onClick={handleCopy}
-            className={`shrink-0 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${
-              copied
+            className={`shrink-0 px-5 py-3 rounded-xl text-sm font-semibold transition-all ${copied
                 ? "bg-teal text-white"
                 : "bg-dark text-white hover:bg-dark/90"
-            }`}
+              }`}
           >
             {copied
               ? isAr ? "تم النسخ!" : "Copied!"
@@ -211,11 +211,10 @@ export default function ReferralsPage() {
               <div key={referral.id} className="px-6 py-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
-                      referral.refereeType === "creator"
+                    className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${referral.refereeType === "creator"
                         ? "bg-orange/10"
                         : "bg-teal/10"
-                    }`}
+                      }`}
                   >
                     {referral.refereeType === "creator" ? "☕" : "♥"}
                   </div>
@@ -241,19 +240,18 @@ export default function ReferralsPage() {
                     </span>
                   )}
                   <span
-                    className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
-                      referral.status === "rewarded"
+                    className={`text-xs font-semibold px-2.5 py-1 rounded-full ${referral.status === "rewarded"
                         ? "bg-teal/10 text-teal"
                         : referral.status === "completed"
-                        ? "bg-orange/10 text-orange"
-                        : "bg-dark/5 text-dark/40"
-                    }`}
+                          ? "bg-orange/10 text-orange"
+                          : "bg-dark/5 text-dark/40"
+                      }`}
                   >
                     {referral.status === "rewarded"
                       ? isAr ? "مكافأ" : "Rewarded"
                       : referral.status === "completed"
-                      ? isAr ? "مكتمل" : "Completed"
-                      : isAr ? "قيد الانتظار" : "Pending"}
+                        ? isAr ? "مكتمل" : "Completed"
+                        : isAr ? "قيد الانتظار" : "Pending"}
                   </span>
                 </div>
               </div>
@@ -262,5 +260,5 @@ export default function ReferralsPage() {
         )}
       </div>
     </div>
-  );
+  </>;
 }
